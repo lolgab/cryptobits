@@ -1,6 +1,6 @@
 import mill._, scalalib._, publish._
 
-object cryptobits extends mill.Cross[CryptobitsModule]("2.13.6", "2.12.8", "2.11.12", "2.10.7")
+object cryptobits extends mill.Cross[CryptobitsModule]("3.3.3", "2.13.6", "2.12.8", "2.11.12", "2.10.7")
 
 class CryptobitsModule(val crossScalaVersion: String) extends CrossScalaModule with PublishModule {
 
@@ -9,8 +9,9 @@ class CryptobitsModule(val crossScalaVersion: String) extends CrossScalaModule w
   def ivyDeps = Agg(ivy"commons-codec:commons-codec:1.12")
 
   object test extends Tests {
-    def ivyDeps = Agg(ivy"org.scalacheck::scalacheck:1.14.0")
-    def testFrameworks = Seq("org.scalacheck.ScalaCheckFramework")
+    val scalaCheckVersion = if(crossScalaVersion.startsWith("3.")) "1.18.0" else "1.14.0"
+    def ivyDeps = Agg(ivy"org.scalacheck::scalacheck:$scalaCheckVersion")
+    def testFramework = "org.scalacheck.ScalaCheckFramework"
   }
 
   def pomSettings = PomSettings(
